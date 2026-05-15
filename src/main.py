@@ -22,3 +22,12 @@ def read_blog_comments(blog_id: int):
 # @app.get("/blogs/unpublished")
 # def read_unpublished_blogs():
 #     return {"data": {"blogs": ["blog1", "blog2"]}}
+
+
+# query parameters
+@app.get("/blogs/")
+def read_blogs(limit: int = 10, published: bool = True):
+    if published:
+        return {"data": {"blogs": [f"blog {i}" for i in range(limit)]}}
+    else:
+        return {"data": {"blogs": [f"unpublished blog {i}" for i in range(limit)]}}
