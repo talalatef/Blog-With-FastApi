@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from typing import Optional
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -31,3 +33,19 @@ def read_blogs(limit: int = 10, published: bool = True):
         return {"data": {"blogs": [f"blog {i}" for i in range(limit)]}}
     else:
         return {"data": {"blogs": [f"unpublished blog {i}" for i in range(limit)]}}
+    
+
+# request body
+class Blog(BaseModel):
+    title: str
+    content: str
+    published: Optional[bool] = None
+
+@app.post("/blogs/")
+def create_blog(blog: Blog):
+    return {"data": {"blog": blog}}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="localhost", port=8000)
